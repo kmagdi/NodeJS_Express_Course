@@ -1,20 +1,15 @@
 const express=require('express')
+const { indexOf } = require('lodash')
 const app=express()
-const logger=require('./logger')
-//this is the better solution:
-app.use('/api',logger)
-app.get('/',(req,res)=>{
-    res.send('Home Page')
-})
-app.get('/about',(req,res)=>{
-    res.send('About')
-})
-app.get('/api/products',(req,res)=>{
-    res.send('Products')
-})
-app.get('/api/items',(req,res)=>{
-    res.send('Items')
-})
+const people=require('./routes/people')
+const auth=require('./routes/auth')
+
+app.use(express.static('./methods-public'))
+app.use(express.urlencoded({extended:false}))
+app.use(express.json())
+
+app.use('/api/people',people)
+app.use('/login',auth)
 
 app.listen(5000,()=>{
     console.log('Server is listening on port 5000...')
